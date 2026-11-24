@@ -1,0 +1,17 @@
+{
+  "identifier": "ash/log-grapple",
+  "version": "0.5.5",
+  "name": "Log Grapple",
+  "author": "ashenmare",
+  "description": "Every log and pulpwood loader loads at least 3,000 tons a day and none is ever slowed. At camps, a log loader and a pulpwood loader built by the same milestone also load on each other's tracks. Logs can ride in gondolas and draw as logs there, and pulpwood draws in every gondola. The Scott Tie Plant unloads logs as fast as the Whittier sawmill and works on both its tracks. Optional files make logging camp production 2x to 5x.",
+  "scope": "optional",
+  "dependencies": {
+    "required": [
+      "rr/game >=0.6.3",
+      "rr/loads",
+      "rr/loads-models01",
+      "rr/fl-skeleton01",
+      "rr/fb-flatcar04"
+    ]
+  }
+}
