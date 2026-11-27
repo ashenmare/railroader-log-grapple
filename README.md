@@ -2,7 +2,7 @@
 
 **Nexus Mods** https://www.nexusmods.com/railroader/mods/2368
 
-This is the source of Log Grapple 0.5.5. The ready-made zip is on the Nexus page.
+This is the source of Log Grapple 0.5.6. The ready-made zip is on the Nexus page.
 
 Log and pulpwood loaders that keep up with your trains. A data-only mod, no DLL.
 
@@ -20,6 +20,12 @@ Log and pulpwood loaders that keep up with your trains. A data-only mod, no DLL.
   showed crates. In the 35ft and 48ft gondolas the pile is squashed lower to fit.
 - The Scott Tie Plant unloads logs as fast as the Whittier sawmill does (36,000 tons a day, up from 1,800).
 - At the Scott Tie Plant, logs and creosote unload on both tracks, and ties load and sell on both.
+- Walker's four log tracks reach their switches. Upper's two went from about 53 m to 93 m and 92 m (4 skeleton log cars
+  to 7 and 6), Lower's two from about 76 m to 96 m and 98 m (5 to 7). Each now ends just past the switch's fouling
+  distance (41 m at Upper, 29 m at Lower, the game's own number), so a car on a loader never fouls the switch or the
+  next track. Cars counted at 43.5 ft each with couplers, the length of a log car in the game's own cut readout, so
+  Upper's longer track fits its 7th car with centimetres to spare. The stub end and the pulpwood tracks are
+  unchanged. Longer cars take more of the length, a 67ft Mill gondola about 4 of these.
 
 ## Good to know
 Piles and production are not changed in the main file. A fast loader can empty its pile and then wait on the camp.
@@ -66,6 +72,8 @@ Mods". Pick "Keep My Current Mods" to carry on without it. If you delete the fol
 Available". Pick "Load Without It".
 
 ## Changes
+0.5.6
+Changed Walker Upper's log tracks to take 7 and 6 cars, up from 4 each, and Walker Lower's to take 7 each, up from 5.
 0.5.5
 Added logs drawn as logs in gondolas, and pulpwood drawn as pulpwood in every gondola.
 0.5.4

@@ -42,12 +42,33 @@
 // GB* and no other model lists rr/logs. The game's pulpwood model already admits GB but its minimum height (1.8 m) only fits the
 // 40ft wood gondola; the minimum goes to 1.2 m, from the exact vanilla value only, so the other four gondolas draw pulpwood too.
 // Info.json requires the packs that own the base model (loads-models01), the log mesh (fl-skeleton01) and the pulpwood model (fb-flatcar04).
+//
+// Walker camp spans (0.5.6): Walker Upper's two log tracks (l2, l3) and Walker Lower's two (l1-0, l1-1) used to stop 50 to 80 m short
+// of their switches. Each span's switch end moves out to just past the switch's fouling distance (the game's own number,
+// GraphFoulingExtension.CalculateFoulingDistance: 41 m at Walker Upper's switch, 29 m at Walker Lower's; 0.1 m past it here), so a car on
+// the loader never sits on the switch or the track beside it. The stub end stays where it was. Only the four lists below change; they
+// are replaced whole, and only when all four are exactly the game's own (a changed map or another mod's edit: left alone). The pulpwood
+// spans and every other span are untouched. tools/check_walker.py proves the new ends against the track graph.
 
 import log
 
 let target = 6000000.0
 let MULT = 1.0   // production variant, 1.0 (the main file) to 5.0
 let sawmillRate = 72000000.0   // fallback only: Whittier Saw Mill R1's carUnloadRate on the 0.6.3 map
+
+let walkerIds = ["l1-0", "l1-1", "l2", "l3"]
+let walkerFrom = [["St68|b|0.432", "St68|a|48.821"], ["Smn9|b|0.146", "Sd8f|a|50.372"], ["S4yp|b|0.293", "S4yp|a|80.815"], ["Ss3x|a|79.085", "S4tr|b|0.575"]]
+let walkerTo = [["St68|b|0.432", "St68|a|29.1"], ["Smn9|b|0.146", "Sd8f|a|29.1"], ["S4yp|b|0.293", "S4yp|a|41.1"], ["Ss3x|a|41.1", "S4tr|b|0.575"]]
+
+func sameRefs(a, b) {
+    if a.count != b.count { return false }
+    var i = 0
+    while i < b.count {
+        if a[i] != b[i] { return false }
+        i = i + 1
+    }
+    return true
+}
 
 func isTimber(c) {
     if !c.has("kind") || !c.has("loadId") { return false }
@@ -209,6 +230,26 @@ func modifyMap(map) {
                 }
             }
         }
+        // Walker camp spans (0.5.6): all four exactly as the game ships them, or none is touched.
+        var longer = 0
+        if areas.has("bryson-above") && areas["bryson-above"].has("industries") && areas["bryson-above"]["industries"].has("logcamp1")
+            && areas["bryson-above"]["industries"]["logcamp1"].has("trackSpans") {
+            var wspans = areas["bryson-above"]["industries"]["logcamp1"]["trackSpans"]
+            var vanilla = true
+            var wi = 0
+            for wid in walkerIds {
+                if !wspans.has(wid) || !sameRefs(wspans[wid], walkerFrom[wi]) { vanilla = false }
+                wi = wi + 1
+            }
+            if vanilla {
+                wi = 0
+                for wid in walkerIds {
+                    data["ops"]["areas"]["bryson-above"]["industries"]["logcamp1"]["trackSpans"][wid] = walkerTo[wi]
+                    wi = wi + 1
+                    longer = longer + 1
+                }
+            }
+        }
         for aid in areas {
             if !areas[aid].has("industries") { continue }
             var industries = areas[aid]["industries"]
@@ -269,6 +310,6 @@ func modifyMap(map) {
         // game's own component ids), since a Data.rl can't write to the debug log.
         var made = ""
         if MULT > 1.0 { made = "; production and loading x\(MULT) on \(scaled.count) log/pulpwood loaders (\(scaled.join(", ")))" }
-        log.info("[log-grapple] raised \(raised.count) log/pulpwood loaders to \(target) lb/day (\(raised.join(", "))); \(crossed.count) camp loaders also load on their same-group partner's tracks (\(crossed.join(", "))); \(tied) tie plant unloader raised; \(both) tie plant components on both tracks\(made)")
+        log.info("[log-grapple] raised \(raised.count) log/pulpwood loaders to \(target) lb/day (\(raised.join(", "))); \(crossed.count) camp loaders also load on their same-group partner's tracks (\(crossed.join(", "))); \(tied) tie plant unloader raised; \(both) tie plant components on both tracks; \(longer) Walker camp spans lengthened\(made)")
     })
 }
